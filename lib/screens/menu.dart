@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
+import 'package:myportofolio_mobile/widgets/project_card.dart';
+import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});
@@ -7,7 +9,7 @@ class MyHomePage extends StatelessWidget {
   final String nama = "Salwa Hafiza Aqila";
   final String kelas = "PBP A";
 
-  final List<ItemHomepage> items = [
+    final List<ItemHomepage> items = [
     ItemHomepage("Lihat Proyek", Icons.folder, Colors.blue),
     ItemHomepage("Tambah Proyek", Icons.add_circle, Colors.green),
     ItemHomepage("Logout", Icons.logout, Colors.red),
@@ -15,9 +17,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Scaffold menyediakan struktur visual dasar halaman (AppBar, Body, SnackBar).
     return Scaffold(
-      // AppBar menampilkan bar bagian atas halaman aplikasi.
       appBar: AppBar(
         title: const Text(
           'MyPortofolio',
@@ -27,14 +27,14 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
         backgroundColor: Theme.of(context).colorScheme.primary,
+        iconTheme: const IconThemeData(color: Colors.white),
       ),
-      // Body halaman utama dengan padding di sekelilingnya.
+      drawer: const LeftDrawer(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            // Baris horizontal untuk menampilkan 3 InfoCard secara sejajar.
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
@@ -44,7 +44,6 @@ class MyHomePage extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 16.0),
-            // Bagian tengah: pesan sambutan dan kisi tombol menu portofolio.
             Center(
               child: Column(
                 children: [
@@ -58,14 +57,12 @@ class MyHomePage extends StatelessWidget {
                       ),
                     ),
                   ),
-                  // GridView menampilkan kartu tombol dalam tata letak kisi 3 kolom.
                   GridView.count(
                     primary: true,
                     padding: const EdgeInsets.all(20),
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                     crossAxisCount: 3,
-                    // shrinkWrap agar ukuran kisi menyesuaikan tinggi konten anak.
                     shrinkWrap: true,
                     children: items.map((ItemHomepage item) {
                       return ItemCard(item);
@@ -82,7 +79,6 @@ class MyHomePage extends StatelessWidget {
 }
 
 class InfoCard extends StatelessWidget {
-  // Kartu informasi yang menampilkan judul (title) dan isi (content).
   final String title;
   final String content;
 
@@ -91,13 +87,10 @@ class InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Card(
-      // Memberikan efek bayangan kartu elevasi 2 unit.
       elevation: 2.0,
       child: Container(
-        // Menyesuaikan lebar kartu dengan proporsi layar (dibagi 3.5).
         width: MediaQuery.of(context).size.width / 3.5,
         padding: const EdgeInsets.all(16.0),
-        // Menyusun teks title dan content secara vertikal.
         child: Column(
           children: [
             Text(
@@ -105,7 +98,7 @@ class InfoCard extends StatelessWidget {
               style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 8.0),
-            Text(content),
+            Text(content, textAlign: TextAlign.center),
           ],
         ),
       ),
@@ -119,50 +112,4 @@ class ItemHomepage {
   final Color color;
 
   ItemHomepage(this.name, this.icon, this.color);
-}
-
-class ItemCard extends StatelessWidget {
-  final ItemHomepage item;
-
-  const ItemCard(this.item, {super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: item.color,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        // Aksi ketika kartu ditekan oleh pengguna.
-        onTap: () {
-          // Menampilkan SnackBar dengan nama tombol yang ditekan.
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(content: Text("Kamu telah menekan tombol ${item.name}!")),
-            );
-        },
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
 }
